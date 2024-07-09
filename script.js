@@ -1,6 +1,6 @@
 HEIGHT = window.innerHeight * 0.9
 WIDTH = window.innerWidth
-SCALE = 32
+SCALE = 16
 
 var canvas = document.querySelector("canvas")
 canvas.width = WIDTH
@@ -17,11 +17,7 @@ class Vector {
 const camera = new Vector(0, 0)
 const mouse = new Vector(undefined, undefined)
 
-window.addEventListener("mousemove", function (event) {
-	mouse.x = event.x
-	mouse.y = event.y
-})
-console.log(camera)
+const cells = new Set();
 
 function transform_point(p) {
 	z = new Vector(0, 0)
@@ -29,6 +25,36 @@ function transform_point(p) {
 	z.y = HEIGHT / 2 - (p.y - camera.y) * SCALE
 	return z
 }
+function inverse_transform_point(z){
+	p = new Vector(0, 0)
+	p.x = (z.x-WIDTH/2)/SCALE + camera.x
+	p.y = (HEIGHT/2 - z.y)/SCALE + camera.y
+	return p
+}
+
+window.addEventListener("mousemove", function (event) {
+	mouse.x = event.x
+	mouse.y = event.y
+})
+window.addEventListener("click",function(event)
+{
+	z = new Vector(mouse.x, mouse.y)
+	p = inverse_transform_point(z)
+	p.x = Math.round(p.x)
+	p.y = Math.round(p.y)
+	if(cells.has(p))
+	{
+		cells.delete(p)
+	}
+	else{
+		cells.add(p)
+	}
+	
+	console.log(cells)
+})
+console.log(camera)
+
+
 function drawline(start, end, color) {
 	// start and end are vectors with respect to the abstract space
 	s = transform_point(start)
@@ -94,6 +120,15 @@ function animate() {
 	drawVertical(new Vector(0,0))
 
 	drawGrid()
+
+	for(const t of cells)
+	{
+		c.fillStyle = "white"
+		rt = transform_point(new Vector(t.x+0.5,t.y+0.5))
+		lb = transform_point(new Vector(t.x-0.5,t.y-0.5))
+		c.fillRect(lb.x,lb.y,rt.x-lb.x,rt.y-lb.y)
+
+	}
 
 }
 animate()
