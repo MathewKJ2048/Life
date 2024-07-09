@@ -164,7 +164,7 @@ function step()
 		dr = new Vector(t.x-1,t.y-1)
 		neighbours = [u,l,d,r,ul,ur,dl,dr]
 		ct=0
-		for(n in neighbours)
+		for(n of neighbours)
 		{
 			if(cells.has(stringify(n)))
 			{
@@ -173,20 +173,19 @@ function step()
 		}
 		if(cells.has(stringify(t)))
 		{
-			if(ct==2 || ct==3)next_cell_set.add(stringify(t));	
-			console.log("2 or 3")
+			if(ct==2 || ct==3)
+			{next_cell_set.add(stringify(t));	
+			console.log("continue"+ct)}
 		}
 		else
 		{
-			if(ct==3)next_cell_set.add(stringify(t));
-			console.log("3")
+			if(ct==3)
+			{next_cell_set.add(stringify(t));
+			console.log("born"+ct)}
 		}
 	}
-	cells.clear()
-	for(t_ in next_cell_set)
-	{
-		cells.add(t_)
-	}
+	console.log(next_cell_set)
+	cells = next_cell_set
 }
 
 step_button.addEventListener("click",function(event){
