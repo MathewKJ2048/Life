@@ -5,7 +5,7 @@ LINE_COLOR = "grey"
 BACKGROUND = "black"
 SQUARE = "white"
 MAX_SCALE = 32
-MIN_SCALE = 8
+MIN_SCALE = 4
 
 PLAYING = false
 
@@ -203,13 +203,20 @@ right_button.addEventListener("click",function(main){
 	camera.x+=MAX_SCALE/SCALE
 })
 
+/*
+is_down = False
 
-canvas.addEventListener("mousemove", function (event) {
+canvas.addEventListener("mousedown", function (event) {
+	is_down = true
+})
+canvas.addEventListener("mouseup", function (event) {
+	is_down = false
+})*/
+
+canvas.addEventListener("mousemove",function(event)
+{
 	mouse.x = event.x
 	mouse.y = event.y
-})
-canvas.addEventListener("mousedown",function(event)
-{
 	z = new Vector(mouse.x, mouse.y)
 	p = inverse_transform_point(z)
 	p.x = Math.round(p.x)
@@ -218,10 +225,6 @@ canvas.addEventListener("mousedown",function(event)
 	if(!cells.has(t))
 	{
 		cells.add(t)
-	}
-	else
-	{
-		cells.delete(t)
 	}})
 
 

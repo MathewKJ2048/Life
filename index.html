@@ -2,20 +2,28 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Conway's Life</title>
+		<title>Conway's Game of Life</title>
 		<link rel="stylesheet" href="styles.css">
 	</head>
 	<body>
 		<canvas></canvas>
-		<button id="play_button">▶</button>
-		<button id="step_button">></button>
-		<button id="clear_button">↺</button>
-		<button id="zoom_in">+</button>
-		<button id="zoom_out">-</button>
-		<button id="up">⬆</button>
-		<button id="down">⬇</button>
-		<button id="left">⬅</button>
-		<button id="right">➡</button>
-		<script src="script.js"></script>
+		<div class="parent">
+			<div class="child-left">
+				<button id="play_button">▶</button>
+				<button id="step_button">></button>
+				<button id="clear_button">↺</button>
+			</div>
+			<div class="child-right">
+				<button id="zoom_in">+</button>
+				<button id="zoom_out">-</button>
+				<button id="up">⬆</button>
+				<button id="down">⬇</button>
+				<button id="left">⬅</button>
+				<button id="right">➡</button>
+				<script src="script.js"></script>
+			</div>
+		</div>
+		
+		
 	</body>
 </html>
