@@ -17,13 +17,17 @@ class Vector {
 const camera = new Vector(0, 0)
 const mouse = new Vector(undefined, undefined)
 
-const cells = new Set();
+const cells = new Set()
 
 function transform_point(p) {
 	z = new Vector(0, 0)
 	z.x = (p.x - camera.x) * SCALE + WIDTH / 2
 	z.y = HEIGHT / 2 - (p.y - camera.y) * SCALE
 	return z
+}
+function stringify(p)
+{
+	return p.x+"|"+p.y
 }
 function inverse_transform_point(z){
 	p = new Vector(0, 0)
@@ -42,14 +46,15 @@ window.addEventListener("click",function(event)
 	p = inverse_transform_point(z)
 	p.x = Math.round(p.x)
 	p.y = Math.round(p.y)
-	if(cells.has(p))
+	t = stringify(p)
+	if(!cells.has(t))
 	{
-		cells.delete(p)
+		cells.add(t)
 	}
-	else{
-		cells.add(p)
+	else
+	{
+		cells.delete(t)
 	}
-	
 	console.log(cells)
 })
 console.log(camera)
@@ -110,6 +115,11 @@ function drawGrid()
 	}
 }
 
+function step()
+{
+
+}
+
 function animate() {
 	requestAnimationFrame(animate);
 	c.fillStyle = "black"
@@ -119,16 +129,18 @@ function animate() {
 	drawHorizontal(new Vector(0,0))
 	drawVertical(new Vector(0,0))
 
-	drawGrid()
 
-	for(const t of cells)
+	for(const t_ of cells)
 	{
 		c.fillStyle = "white"
+		coords = t_.split("|")
+		t = new Vector(parseInt(coords[0]),parseInt(coords[1]))
 		rt = transform_point(new Vector(t.x+0.5,t.y+0.5))
 		lb = transform_point(new Vector(t.x-0.5,t.y-0.5))
 		c.fillRect(lb.x,lb.y,rt.x-lb.x,rt.y-lb.y)
 
 	}
+	drawGrid()
 
 }
 animate()
