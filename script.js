@@ -7,6 +7,8 @@ SQUARE = "white"
 MAX_SCALE = 32
 MIN_SCALE = 8
 
+PLAYING = false
+
 var canvas = document.querySelector("canvas")
 const step_button = document.getElementById("step_button")
 const play_button = document.getElementById("play_button")
@@ -182,6 +184,18 @@ zoom_in.addEventListener("click",function(event){
 zoom_out.addEventListener("click",function(event){
 	if(SCALE>MIN_SCALE)SCALE-=1
 })
+play_button.addEventListener("click",function(main){
+	PLAYING = !PLAYING
+	console.log(PLAYING)
+	if(PLAYING)
+	{
+		document.getElementById("play_button").innerHTML = "Pause"
+	}
+	else
+	{
+		document.getElementById("play_button").innerHTML = "Play"
+	}
+})
 
 
 canvas.addEventListener("mousemove", function (event) {
@@ -227,6 +241,11 @@ function animate() {
 
 	}
 	drawGrid()
+
+	if(PLAYING)
+	{
+		step()
+	}
 
 }
 animate()
