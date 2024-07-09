@@ -4,11 +4,15 @@ SCALE = 16
 LINE_COLOR = "grey"
 BACKGROUND = "black"
 SQUARE = "white"
+MAX_SCALE = 32
+MIN_SCALE = 8
 
 var canvas = document.querySelector("canvas")
 const step_button = document.getElementById("step_button")
 const play_button = document.getElementById("play_button")
 const clear_button = document.getElementById("clear_button")
+const zoom_in = document.getElementById("zoom_in")
+const zoom_out = document.getElementById("zoom_out")
 canvas.width = WIDTH
 canvas.height = HEIGHT
 var c = canvas.getContext("2d");
@@ -171,6 +175,12 @@ step_button.addEventListener("click",function(event){
 })
 clear_button.addEventListener("click",function(event){
 	cells = new Set()
+})
+zoom_in.addEventListener("click",function(event){
+	if(SCALE<MAX_SCALE)SCALE+=1
+})
+zoom_out.addEventListener("click",function(event){
+	if(SCALE>MIN_SCALE)SCALE-=1
 })
 
 
