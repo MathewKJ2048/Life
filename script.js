@@ -15,6 +15,10 @@ const play_button = document.getElementById("play_button")
 const clear_button = document.getElementById("clear_button")
 const zoom_in = document.getElementById("zoom_in")
 const zoom_out = document.getElementById("zoom_out")
+const up_button = document.getElementById("up")
+const down_button = document.getElementById("down")
+const left_button = document.getElementById("left")
+const right_button = document.getElementById("right")
 canvas.width = WIDTH
 canvas.height = HEIGHT
 var c = canvas.getContext("2d");
@@ -45,16 +49,6 @@ function inverse_transform_point(z){
 	p.y = (HEIGHT/2 - z.y)/SCALE + camera.y
 	return p
 }
-function drawline(start, end, color) {
-	// start and end are vectors with respect to the abstract space
-	s = transform_point(start)
-	e = transform_point(end)
-	c.strokeStyle = color
-	c.beginPath()
-	c.moveTo(s.x, s.y)
-	c.lineTo(e.x, e.y)
-	c.stroke()
-}
 function drawHorizontal(p, color)
 {
 	z = transform_point(p)
@@ -83,7 +77,7 @@ function drawGrid()
 	num_h = Math.floor(HEIGHT/SCALE)
 	for(y=-num_h;y<=num_h;y++)
 	{
-		p = new Vector(0,y+0.5)
+		p = new Vector(camera.x,camera.y+y+0.5)
 		if(in_screen(p))
 		{
 			drawHorizontal(p,LINE_COLOR)
@@ -92,7 +86,7 @@ function drawGrid()
 	num_w = Math.floor(WIDTH/SCALE)
 	for(x=-num_w;x<=num_w;x++)
 	{
-		p = new Vector(x+0.5,0)
+		p = new Vector(camera.x+x+0.5,camera.y)
 		if(in_screen(p))
 		{
 			drawVertical(p,LINE_COLOR)
@@ -189,12 +183,24 @@ play_button.addEventListener("click",function(main){
 	console.log(PLAYING)
 	if(PLAYING)
 	{
-		document.getElementById("play_button").innerHTML = "Pause"
+		document.getElementById("play_button").innerHTML = "||"
 	}
 	else
 	{
-		document.getElementById("play_button").innerHTML = "Play"
+		document.getElementById("play_button").innerHTML = "▶"
 	}
+})
+up_button.addEventListener("click",function(main){
+	camera.y+=SCALE
+})
+down_button.addEventListener("click",function(main){
+	camera.y-=SCALE
+})
+left_button.addEventListener("click",function(main){
+	camera.x-=SCALE
+})
+right_button.addEventListener("click",function(main){
+	camera.x+=MAX_SCALE/SCALE
 })
 
 
@@ -221,13 +227,13 @@ canvas.addEventListener("mousedown",function(event)
 
 
 function animate() {
+
+
+
 	requestAnimationFrame(animate);
 	c.fillStyle = BACKGROUND
 	c.fillRect(0, 0, WIDTH, HEIGHT)
 
-	drawline(new Vector(0, 1), new Vector(1, 0), "red");
-	drawHorizontal(new Vector(0,0))
-	drawVertical(new Vector(0,0))
 
 
 	for(const t_ of cells)
@@ -249,5 +255,3 @@ function animate() {
 
 }
 animate()
-
-

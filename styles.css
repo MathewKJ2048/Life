@@ -1,8 +1,18 @@
 canvas
 {
-	border: 1px solid black;
+	border: 0px solid black;
 }
 body
 {
 	margin: 0;
+}
+button
+{
+	width: height;
+	border: 2px solid black;
+	margin: 4px;
+	padding: 8px;
+	font-size: x-large;
+	text-align: center;
+	border-radius: 10%;
 }

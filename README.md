@@ -10,3 +10,4 @@ Try it online here: [https://mathewkj2048.github.io/Life/](https://mathewkj2048.
 - zoom in and out
 - click to add cell
 - reset
+- infinite scroll
