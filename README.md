@@ -3,6 +3,8 @@ Conway's Game of Life, written as a webapp using HTML5 Canvas and vanilla javasc
 
 Try it online here: [https://mathewkj2048.github.io/Life/](https://mathewkj2048.github.io/Life/)
 
+![screenshot](image.png)
+
 ## Features:
 
 - step
