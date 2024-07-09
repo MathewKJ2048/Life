@@ -3,6 +3,7 @@ WIDTH = window.innerWidth
 SCALE = 16
 
 var canvas = document.querySelector("canvas")
+const step_button = document.querySelector("button")
 canvas.width = WIDTH
 canvas.height = HEIGHT
 var c = canvas.getContext("2d");
@@ -17,7 +18,7 @@ class Vector {
 const camera = new Vector(0, 0)
 const mouse = new Vector(undefined, undefined)
 
-const cells = new Set()
+var cells = new Set()
 
 function transform_point(p) {
 	z = new Vector(0, 0)
@@ -36,11 +37,12 @@ function inverse_transform_point(z){
 	return p
 }
 
-window.addEventListener("mousemove", function (event) {
+canvas.addEventListener("mousemove", function (event) {
 	mouse.x = event.x
 	mouse.y = event.y
 })
-window.addEventListener("click",function(event)
+
+canvas.addEventListener("click",function(event)
 {
 	z = new Vector(mouse.x, mouse.y)
 	p = inverse_transform_point(z)
@@ -54,10 +56,7 @@ window.addEventListener("click",function(event)
 	else
 	{
 		cells.delete(t)
-	}
-	console.log(cells)
-})
-console.log(camera)
+	}})
 
 
 function drawline(start, end, color) {
@@ -115,10 +114,87 @@ function drawGrid()
 	}
 }
 
+
 function step()
 {
-
+	console.log("step called")
+	console.log(cells)
+	cell_int = []
+	for(const t_ of cells)
+	{
+		coords = t_.split("|")
+		console.log("iufiuwefiuew")
+		cell_int.push(new Vector(
+			parseInt(coords[0]),parseInt(coords[1])
+		))
+	}
+	console.log(cell_int)
+	cells_to_compute = []
+	for(const t of cell_int)
+	{
+		u = new Vector(t.x,t.y+1)
+		d = new Vector(t.x,t.y-1)
+		l = new Vector(t.x-1,t.y)
+		r = new Vector(t.x+1,t.y)
+		ul = new Vector(t.x+1,t.y+1)
+		ur = new Vector(t.x+1,t.y-1)
+		dl = new Vector(t.x-1,t.y+1)
+		dr = new Vector(t.x-1,t.y-1)
+		cells_to_compute.push(t)
+		cells_to_compute.push(u)
+		cells_to_compute.push(l)
+		cells_to_compute.push(r)
+		cells_to_compute.push(d)
+		cells_to_compute.push(ul)
+		cells_to_compute.push(ur)
+		cells_to_compute.push(dl)
+		cells_to_compute.push(dr)
+	}
+	console.log(cells_to_compute)
+	next_cell_set = new Set()
+	for(const t of cells_to_compute)
+	{
+		u = new Vector(t.x,t.y+1)
+		d = new Vector(t.x,t.y-1)
+		l = new Vector(t.x-1,t.y)
+		r = new Vector(t.x+1,t.y)
+		ul = new Vector(t.x+1,t.y+1)
+		ur = new Vector(t.x+1,t.y-1)
+		dl = new Vector(t.x-1,t.y+1)
+		dr = new Vector(t.x-1,t.y-1)
+		neighbours = [u,l,d,r,ul,ur,dl,dr]
+		ct=0
+		for(n in neighbours)
+		{
+			if(cells.has(stringify(n)))
+			{
+				ct+=1
+			}
+		}
+		if(cells.has(stringify(t)))
+		{
+			if(ct==2 || ct==3)next_cell_set.add(stringify(t));	
+			console.log("2 or 3")
+		}
+		else
+		{
+			if(ct==3)next_cell_set.add(stringify(t));
+			console.log("3")
+		}
+	}
+	cells.clear()
+	for(t_ in next_cell_set)
+	{
+		cells.add(t_)
+	}
 }
+
+step_button.addEventListener("click",function(event){
+	step()
+	console.log("button pressed")
+})
+
+
 
 function animate() {
 	requestAnimationFrame(animate);
