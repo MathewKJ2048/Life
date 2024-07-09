@@ -1,13 +1,17 @@
 HEIGHT = window.innerHeight * 0.9
 WIDTH = window.innerWidth
 SCALE = 16
+LINE_COLOR = "grey"
+BACKGROUND = "black"
+SQUARE = "white"
 
 var canvas = document.querySelector("canvas")
-const step_button = document.querySelector("button")
+const step_button = document.getElementById("step_button")
+const play_button = document.getElementById("play_button")
+const clear_button = document.getElementById("clear_button")
 canvas.width = WIDTH
 canvas.height = HEIGHT
 var c = canvas.getContext("2d");
-
 
 class Vector {
 	constructor(x, y) {
@@ -17,7 +21,6 @@ class Vector {
 }
 const camera = new Vector(0, 0)
 const mouse = new Vector(undefined, undefined)
-
 var cells = new Set()
 
 function transform_point(p) {
@@ -36,29 +39,6 @@ function inverse_transform_point(z){
 	p.y = (HEIGHT/2 - z.y)/SCALE + camera.y
 	return p
 }
-
-canvas.addEventListener("mousemove", function (event) {
-	mouse.x = event.x
-	mouse.y = event.y
-})
-
-canvas.addEventListener("click",function(event)
-{
-	z = new Vector(mouse.x, mouse.y)
-	p = inverse_transform_point(z)
-	p.x = Math.round(p.x)
-	p.y = Math.round(p.y)
-	t = stringify(p)
-	if(!cells.has(t))
-	{
-		cells.add(t)
-	}
-	else
-	{
-		cells.delete(t)
-	}})
-
-
 function drawline(start, end, color) {
 	// start and end are vectors with respect to the abstract space
 	s = transform_point(start)
@@ -100,7 +80,7 @@ function drawGrid()
 		p = new Vector(0,y+0.5)
 		if(in_screen(p))
 		{
-			drawHorizontal(p,"grey")
+			drawHorizontal(p,LINE_COLOR)
 		}
 	}
 	num_w = Math.floor(WIDTH/SCALE)
@@ -109,7 +89,7 @@ function drawGrid()
 		p = new Vector(x+0.5,0)
 		if(in_screen(p))
 		{
-			drawVertical(p,"grey")
+			drawVertical(p,LINE_COLOR)
 		}
 	}
 }
@@ -117,13 +97,11 @@ function drawGrid()
 
 function step()
 {
-	console.log("step called")
 	console.log(cells)
 	cell_int = []
 	for(const t_ of cells)
 	{
 		coords = t_.split("|")
-		console.log("iufiuwefiuew")
 		cell_int.push(new Vector(
 			parseInt(coords[0]),parseInt(coords[1])
 		))
@@ -187,17 +165,40 @@ function step()
 	console.log(next_cell_set)
 	cells = next_cell_set
 }
-
 step_button.addEventListener("click",function(event){
 	step()
 	console.log("button pressed")
 })
+clear_button.addEventListener("click",function(event){
+	cells = new Set()
+})
+
+
+canvas.addEventListener("mousemove", function (event) {
+	mouse.x = event.x
+	mouse.y = event.y
+})
+canvas.addEventListener("mousedown",function(event)
+{
+	z = new Vector(mouse.x, mouse.y)
+	p = inverse_transform_point(z)
+	p.x = Math.round(p.x)
+	p.y = Math.round(p.y)
+	t = stringify(p)
+	if(!cells.has(t))
+	{
+		cells.add(t)
+	}
+	else
+	{
+		cells.delete(t)
+	}})
 
 
 
 function animate() {
 	requestAnimationFrame(animate);
-	c.fillStyle = "black"
+	c.fillStyle = BACKGROUND
 	c.fillRect(0, 0, WIDTH, HEIGHT)
 
 	drawline(new Vector(0, 1), new Vector(1, 0), "red");
@@ -207,7 +208,7 @@ function animate() {
 
 	for(const t_ of cells)
 	{
-		c.fillStyle = "white"
+		c.fillStyle = SQUARE
 		coords = t_.split("|")
 		t = new Vector(parseInt(coords[0]),parseInt(coords[1]))
 		rt = transform_point(new Vector(t.x+0.5,t.y+0.5))
@@ -219,4 +220,5 @@ function animate() {
 
 }
 animate()
+
 
